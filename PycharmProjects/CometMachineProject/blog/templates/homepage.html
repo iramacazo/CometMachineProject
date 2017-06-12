@@ -1,12 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static from staticfiles %}
     <meta charset="UTF-8">
     <title>Blogger!</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
 </head>
 <body>
-    Welcome To Blogger!
-    <a href="login">Login</a>
-    <a href="register">Register</a>
+    <div class="jumbotron">
+        <div class="container text-center">
+            <h1>Welcome To Blogger!</h1>
+            <button type="button" class="btn" data-toggle="modal" data-target="#loginModal">Login</button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#registerModal">Register</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title text-center">Login</h4>
+            </div>
+            <div class="modal-body container-fluid">
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field2 in login %}
+                        <div class="form-group">
+                            {{ field2.label_tag }}
+                            {{ field2 }}
+                            {% if field2.help_text %}
+                                {% if field2.help_text|length > 70 %}
+                                    {% else %}
+                                    <br>
+                                    <em class="small">{{ field2.help_text }}</em>
+                                {% endif %}
+                                {% for error in field2.errors %}
+                                    <span class="help-inline">{{ field2.errors }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+          </div>
+
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title text-center">Register</h4>
+            </div>
+            <div class="modal-body container-fluid">
+                <form method="POST" >
+                    {% csrf_token %}
+                    {% for field in registration %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                {% if field.help_text|length > 70 %}
+                                    {% else %}
+                                    <br>
+                                    <em class="small">{{ field.help_text }}</em>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <span class="help-inline">{{ field.errors }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit">Sign up</button>
+                </form>
+            </div>
+          </div>
+
+        </div>
+    </div>
+
 </body>
 </html>
